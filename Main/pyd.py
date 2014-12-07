@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 '''
 #######################################################################################
-#                        Python Youtube Downloader (PYD) v 1.0                        #
+#                        Python Youtube Downloader (PYD) v 1.0.0                      #
 #                                                                                     #
 #                        Author - Prathamesh Kakade                                   #
 #                        https://github.com/itsmepsk                                  #
