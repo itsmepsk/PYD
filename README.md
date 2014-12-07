@@ -1,9 +1,9 @@
-PYD v1.0
+PYD v1.0.0
 ========
 
 Python Youtube Downloader
 
-							Python Youtube Downloader (PYD) v 1.0                        
+							Python Youtube Downloader (PYD) v 1.0.0                       
 																						 
 							Author - Prathamesh Kakade                                   
 							https://github.com/itsmepsk                                  
