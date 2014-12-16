@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 '''
 #######################################################################################
-#                        Python Youtube Downloader (PYD) v 1.0.0                      #
+#                        Python Youtube Downloader (PYD) v 1.1.1                      #
 #                                                                                     #
 #                        Author - Prathamesh Kakade                                   #
 #                        https://github.com/itsmepsk                                  #
@@ -17,11 +17,12 @@
 #                                                                                     #
 #                                                                                     #
 #           Limitations:                                                              #
-#           ->Cannot Download videos with NON-ASCII characters in video title.        #
 #           ->Does not support Pause and Resume.                                      #
 #           ->No Proxy Support.                                                       #
 #                                                                                     #
-#                                                                                     #
+#           New features in this version:                                             #
+#           ->Download videos with NON-ASCII characters in video title.               #
+# 																					  #		
 #           Requirements:                                                             #
 #           The following requirements should fullfilled for using PYD.               #
 #           ->Installation of PYTHON 2.7 .                                            #
@@ -53,6 +54,7 @@ import mechanize
 import os
 import re
 import sys
+import time
 import urllib
 
 from BeautifulSoup import BeautifulSoup
@@ -79,9 +81,14 @@ def dlProgress(count, blockSize, totalSize):
         sys.stdout.write("\b")
     sys.stdout.flush()
 
+for i in range(0,120):
+    sys.stdout.write("-")
+sys.stdout.write("\n\n\n") 
+yurl = " "
+while (not yurl.strip()):
+    yurl = raw_input("Enter Youtube video link : ")
+    
 
-
-yurl = raw_input("Enter Youtube video link : ")
 url = "http://www.save-video.com/download.php?url="
 url += urllib.quote_plus(yurl)
 
@@ -136,50 +143,91 @@ for each in link:
         
 invalid = 1
 
-while invalid == 1:
-    print "*********************************"
-    print "*     Available qualities :     *"
-    print "*********************************"
-    for i in range(0,len(stack)):
-        string = "-> Enter "
-        string += str(i+1);
-        string += " for "
-        string += stack[i].contents[0]
+nasci = list()
+
+flag = 0
+print "*********************************"
+print "*     Available qualities :     *"
+print "*********************************"
+for i in range(0,len(stack)):
+    string = "-> Enter "
+    string += str(i+1);
+    string += " for "
+    string += stack[i].contents[0]
+    if "generate.php?url=" in stack[i].get('href'):
         var = urllib.unquote_plus(stack[i].get('href').split('generate.php?url=')[1])
-        string += "      "
-        string += str(fileSize(var))
-        string += "MB"
-        print string
+    if "DownloadFile.php?url=" in stack[i].get('href'):
+        response = br.open(stack[i].get('href'))
+##            time.sleep(1)
+        html = response.read()
+        soup = BeautifulSoup(html)
+##            print soup.prettify()
+        l = soup.findAll('a')
+        for each in l:
+            if each.contents[0] == "Click here to start download":
+                l = each.get('href')
+                var = "http://save-video.com/" + str(l)
+                nasci.append(var)
+                flag = 1
+                break
+##            exit
+    string += "      "
+    string += str(fileSize(var))
+    string += "MB"
+    print string
+sys.stdout.write("\n")
+
+while invalid == 1:
+    choice = " "
+    while (not choice.strip()):
+        choice = raw_input('Enter your choice : ')
     sys.stdout.write("\n")
-      
-    choice = input('Enter your choice : ');
-    sys.stdout.write("\n")
-    if( (choice < 1) | (choice > len(stack)) ):
+    if( ( not choice.isdigit() ) )  :
         print "Invalid Input"
         invalid = 1
     else:
-        invalid = 0
-        url = stack[choice-1].get('href')
-        url = url.split('generate.php?url=')[1]
-        url = urllib.unquote_plus(url)
-        sys.stdout.write("\n")
-        path = raw_input("Enter the path to save the file.(End the path with trailing slash) : ")
-        sys.stdout.write("\n")
-        name = raw_input("Enter the name as to be saved.(Without extension) : ")
-        sys.stdout.write("\n")
-        extension = stack[choice-1].contents[0].split('(')[0]
+        if ( ( int(choice) < 1 ) | (  int(choice) > len(stack) ) ):
+            print "Invalid Input"
+            invalid = 1
+        else:
+            choice = int(choice)
+            if flag == 1:
+                url = nasci[choice-1]
+            else:
+                url = stack[choice-1].get('href')
+                url = url.split('generate.php?url=')[1]
+                url = urllib.unquote_plus(url)
+            invalid = 0
+sys.stdout.write("\n")
+path = " "
+while ( not path.strip() ):
+    path = raw_input("Enter the path to save the file : ")
+    if ( path[len(path)-1] != "/" ) | ( path[len(path)-1] != "\\" ):
+         if  "\\" in path :
+             path+= "\\"
+         if "/" in path:
+             path+= "/"
+         
+    sys.stdout.write("\n")
+name = " "
+while ( not name.strip() ):
+    name = raw_input("Enter the name as to be saved.(Without extension) : ")
+    sys.stdout.write("\n")
+extension = stack[choice-1].contents[0].split('(')[0]
 
-        title = urllib.quote(title)
-        fil = path
-        fil += name
-        fil += "."
-        fil += extension
+title = urllib.quote(title)
+fil = path
+fil += name
+fil += "."
+fil += extension
 
-        print fil
-        sys.stdout.write("\n")
-        
-        if urllib.urlretrieve(url, fil, reporthook=dlProgress ) :
-            print "\n\n\nDownload Completed.\n"
-            for i in range(0,120):
-                sys.stdout.write("-")
-            sys.stdout.write("\n\n\n")
+print fil
+sys.stdout.write("\n")
+
+if urllib.urlretrieve(url, fil, reporthook=dlProgress ) :
+    print "\n\n\nDownload Completed.\n"
+    for i in range(0,120):
+        sys.stdout.write("-")
+    sys.stdout.write("\n\n\n")
+    sys.stdout.write('\a\a\a\a\a')
+    sys.stdout.flush()
