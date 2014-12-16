@@ -1,7 +1,3 @@
-PYD v1.0.0
-========
-
-Python Youtube Downloader
 PYD v1.1.1
 ========
 
