@@ -2,8 +2,12 @@ PYD v1.0.0
 ========
 
 Python Youtube Downloader
+PYD v1.1.1
+========
 
-							Python Youtube Downloader (PYD) v 1.0.0                       
+Python Youtube Downloader
+
+							Python Youtube Downloader (PYD) v 1.1.1                       
 																						 
 							Author - Prathamesh Kakade                                   
 							https://github.com/itsmepsk                                  
@@ -15,13 +19,15 @@ Python Youtube Downloader
 			   ->Select any quality to Download with filesize.                           
 			   ->Manually enter File name.                                               
 			   ->Manually enter Download path.                                           
+			   ->Rings alert bell after download.																 
 																						 
-																						 
-			   Limitations:                                                              
-			   ->Cannot Download videos with NON-ASCII characters in video title.        
+			   Limitations:                                                                      
 			   ->Does not support Pause and Resume.                                      
 			   ->No Proxy Support.                                                       
-																						 
+				
+			   Bugs Fixed:
+			   ->Download videos with NON-ASCII characters in video title.
+			   
 																						 
 			   Requirements:                                                             
 			   The following requirements should fullfilled for using PYD.               
@@ -46,3 +52,4 @@ Python Youtube Downloader
 			   Downloading Youtube videos is against Youtube's policy.                   
 			   Download at your own risk.I am not responsible.                           
 																						 
+								 
